@@ -10,6 +10,6 @@
     }
   ],
   "navigationFallback": {
-    "rewrite": "/apps/climate_change/index.html"
+    "rewrite": "/index.html"
   }
 }
