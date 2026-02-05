@@ -1,8 +1,15 @@
 {
   "routes": [
     {
-      "route": "/apps/climate_change/*",
-      "rewrite": "/apps/climate_change/index.html"
+      "route": "/",
+      "redirect": "/app/climate_change/"
+    },
+    {
+      "route": "/index.html",
+      "redirect": "/app/climate_change/index.html"
     }
-  ]
+  ],
+  "navigationFallback": {
+    "rewrite": "/app/climate_change/index.html"
+  }
 }
