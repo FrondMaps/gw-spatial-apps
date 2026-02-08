@@ -1,4 +1,4 @@
-name: Climate App - DEV Deploy
+name: SLR App - DEV Deploy
 
 on:
   push:
