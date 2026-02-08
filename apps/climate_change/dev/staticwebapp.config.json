@@ -2,7 +2,7 @@
   "routes": [
 
     {
-      "route": "/index.html",
+      "route": "/home.html",
       "redirect": "/apps/climate_change/"
     }
   ],
