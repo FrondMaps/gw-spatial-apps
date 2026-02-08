@@ -3,10 +3,6 @@
     {
       "route": "/",
       "allowedRoles": ["none"]
-    },
-    {
-      "route": "/index.html",
-      "allowedRoles": ["none"]
     }
   ],
   "responseOverrides": {
