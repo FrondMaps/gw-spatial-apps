@@ -1,7 +1,11 @@
 {
   "routes": [
     {
-      "route": "/",
+      "route": "/apps",
+      "allowedRoles": ["authenticated"]
+    },
+    {
+      "route": "/apps/",
       "allowedRoles": ["authenticated"]
     }
   ],
