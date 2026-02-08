@@ -1,15 +1,19 @@
 {
   "routes": [
     {
-      "route": "/index.html",
+      "route": "/",
       "allowedRoles": ["none"]
     },
     {
-      "route": "/",
+      "route": "/index.html",
       "allowedRoles": ["none"]
     }
   ],
   "responseOverrides": {
+    "401": {
+      "rewrite": "/403.html",
+      "statusCode": 403
+    },
     "403": {
       "rewrite": "/403.html",
       "statusCode": 403
