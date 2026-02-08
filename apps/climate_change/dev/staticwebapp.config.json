@@ -3,7 +3,7 @@
 
     {
       "route": "/index.html",
-      "redirect": "/apps/climate_change/index.html"
+      "redirect": "/apps/climate_change/"
     }
   ],
   "navigationFallback": {
