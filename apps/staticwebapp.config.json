@@ -3,10 +3,6 @@
     {
       "route": "/apps",
       "allowedRoles": ["authenticated"]
-    },
-    {
-      "route": "/apps/",
-      "allowedRoles": ["authenticated"]
     }
   ],
   "responseOverrides": {
