@@ -1,9 +1,6 @@
 {
   "routes": [
-    {
-      "route": "/",
-      "redirect": "/apps/climate_change/"
-    },
+
     {
       "route": "/index.html",
       "redirect": "/apps/climate_change/index.html"
