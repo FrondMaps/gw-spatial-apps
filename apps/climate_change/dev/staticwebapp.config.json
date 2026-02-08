@@ -7,6 +7,6 @@
     }
   ],
   "navigationFallback": {
-    "rewrite": "/home.html"
+    "rewrite": "/index.html"
   }
 }
