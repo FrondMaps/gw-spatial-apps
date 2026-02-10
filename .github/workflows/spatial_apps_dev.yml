@@ -1,0 +1,35 @@
+name: Spatial Apps - DEV Deploy
+
+on:
+  push:
+      branches-ignore:
+      - main
+      - deploy-test
+
+  # Allow manually trigger
+  workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: 'Which job to run'
+        required: true
+        type: choice
+        options:
+          - deploy-to-dev
+
+jobs:
+  deploy-to-dev:
+    name: Deploy to Development
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Static Web App (DEV)
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.SWA_APPS_DEV_TOKEN }}
+          action: upload
+          app_location: apps/
+          output_location: ""

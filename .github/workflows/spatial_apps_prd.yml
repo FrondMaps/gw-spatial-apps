@@ -1,0 +1,31 @@
+name: Spatial Apps - PROD Deploy
+
+on:
+    # Allow manually trigger only
+  workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: 'Which job to run'
+        required: true
+        type: choice
+        options:
+          - deploy-to-prd
+
+jobs:
+  deploy-to-prd:
+    name: Deploy to Production
+    if: inputs.job_to_run == 'deploy-to-prod' && github.ref == 'refs/heads/main'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
+
+      - name: Deploy to Azure Static Web App (PROD)
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.SWA_APP_PROD_TOKEN }}
+          action: upload
+          app_location: apps/
+          output_location: ""
