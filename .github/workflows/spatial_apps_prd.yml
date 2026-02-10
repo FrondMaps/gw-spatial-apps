@@ -14,7 +14,7 @@ on:
 jobs:
   deploy-to-prd:
     name: Deploy to Production
-    if: inputs.job_to_run == 'deploy-to-prod' && github.ref == 'refs/heads/main'
+    if: inputs.job_to_run == 'deploy-to-prd' && github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-latest
 
