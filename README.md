@@ -48,4 +48,9 @@ Ensure the following repository secrets are configured in Settings → Secrets:
 Local testing
 
 This repo is a static site under `apps/`. To preview locally, open `apps/index.html` in a browser or serve the folder with a simple Live server
-```
+
+
+## Troubleshooting
+
+- If deployments fail, open the failing workflow run in Actions and inspect the job logs.
+- Verify repository/organization Secrets are present and up-to-date (Settings → Secrets → Actions).
