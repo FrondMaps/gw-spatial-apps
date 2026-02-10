@@ -45,6 +45,17 @@ Ensure the following repository secrets are configured in Settings → Secrets:
 - `SWA_APP_TEST_TOKEN` — token for the TEST Static Web App
 - `SWA_APP_PROD_TOKEN` — token for the PROD Static Web App
 
+Web URL
+
+Dev - https://maps-dev.gw.govt.nz/apps/slr
+      https://maps-dev.gw.govt.nz/apps/climate-change
+  
+Tst - https://maps-test.gw.govt.nz/apps/slr
+      https://maps-test.gw.govt.nz/apps/climate-change
+
+Prd - https://maps.gw.govt.nz/apps/slr
+      https://maps.gw.govt.nz/apps/climate-change
+
 Local testing
 
 This repo is a static site under `apps/`. To preview locally, open `apps/index.html` in a browser or serve the folder with a simple Live server
