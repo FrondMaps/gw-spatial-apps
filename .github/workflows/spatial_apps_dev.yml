@@ -34,6 +34,7 @@ jobs:
       - name: Download latest Climate Change artifact
         run: |
           RUN_ID=$(gh run list \
+            --repo ${{ github.repository }} \
             --workflow "DEV - Build Climate Change" \
             --status success \
             --limit 1 \
@@ -47,9 +48,11 @@ jobs:
 
           echo "Downloading Climate Change artifact from run: $RUN_ID"
 
-          gh run download $RUN_ID -n climate-change-app -D apps/climate-change
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh run download $RUN_ID \
+            --repo ${{ github.repository }} \
+            -n climate-change-app \
+            -D apps/climate-change
+
 
       # -----------------------------
       # Download latest SLR artifact
@@ -57,22 +60,18 @@ jobs:
       - name: Download latest SLR artifact
         run: |
           RUN_ID=$(gh run list \
+            --repo ${{ github.repository }} \
             --workflow "DEV - Build SLR" \
             --status success \
             --limit 1 \
             --json databaseId \
             --jq '.[0].databaseId')
 
-          if [ -z "$RUN_ID" ]; then
-            echo "No successful SLR build found"
-            exit 1
-          fi
-
-          echo "Downloading SLR artifact from run: $RUN_ID"
-
-          gh run download $RUN_ID -n slr-app -D apps/slr
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          gh run download $RUN_ID \
+            --repo ${{ github.repository }} \
+            -n slr-app \
+            -D apps/slr
+            
 
       # -----------------------------
       # Deploy combined apps folder to Azure
