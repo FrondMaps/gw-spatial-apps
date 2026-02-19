@@ -1,0 +1,34 @@
+name: DEV - Build Climate Change
+
+on:
+  push:
+    branches:
+      - deploy-dev
+
+  workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: "Run this build manually"
+        required: true
+        type: choice
+        options:
+          - build-climate-change
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'build-climate-change'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload Climate Change Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: climate-change-app
+          path: apps/climate-change/
+          retention-days: 10

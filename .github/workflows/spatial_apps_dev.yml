@@ -1,84 +1,86 @@
-name: Spatial Apps - DEV Deploy
+name: DEV - Deploy Static Web Apps
 
 on:
   push:
-      branches-ignore:
-      - main
-      - deploy-test
+    branches:
+      - deploy-dev
 
-  # Allow manually trigger
   workflow_dispatch:
     inputs:
       job_to_run:
-        description: 'Which job to run'
+        description: "Run deploy manually"
         required: true
         type: choice
         options:
-          - build-climate-change
-          - build-slr
-          - deploy-to-dev
+          - deploy-dev
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
-  build-climate-change:
-    name: Build Climate Change App
-    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'build-climate-change'
+  deploy:
+    # Run if branch is deploy-dev OR manual workflow_dispatch selecting deploy-dev
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-dev'
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+      - name: Create apps folder
+        run: mkdir -p apps
 
-      - name: Upload Climate Change Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: climate-change-app
-          path: apps/climate-change/
-          retention-days: 10
-          overwrite: true
+      # -----------------------------
+      # Download latest Climate Change artifact
+      # -----------------------------
+      - name: Download latest Climate Change artifact
+        run: |
+          RUN_ID=$(gh run list \
+            --workflow "DEV - Build Climate Change" \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
 
-  build-slr:
-    name: Build SLR App
-    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'build-slr'
-    runs-on: ubuntu-latest
+          if [ -z "$RUN_ID" ]; then
+            echo "No successful Climate Change build found"
+            exit 1
+          fi
 
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+          echo "Downloading Climate Change artifact from run: $RUN_ID"
 
-      - name: Upload SLR Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: slr-app
-          path: apps/slr/
-          retention-days: 10
-          overwrite: true
+          gh run download $RUN_ID -n climate-change-app -D apps/climate-change
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy-to-dev:
-    name: Deploy to Development
-    #needs: [build-climate-change, build-slr]
-    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
-    runs-on: ubuntu-latest
+      # -----------------------------
+      # Download latest SLR artifact
+      # -----------------------------
+      - name: Download latest SLR artifact
+        run: |
+          RUN_ID=$(gh run list \
+            --workflow "DEV - Build SLR" \
+            --status success \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId')
 
-    steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+          if [ -z "$RUN_ID" ]; then
+            echo "No successful SLR build found"
+            exit 1
+          fi
 
-      - name: Download Climate Change Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: climate-change-app
-          path: apps/climate-change/
+          echo "Downloading SLR artifact from run: $RUN_ID"
 
-      - name: Download SLR Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: slr-app
-          path: apps/slr/
+          gh run download $RUN_ID -n slr-app -D apps/slr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # -----------------------------
+      # Deploy combined apps folder to Azure
+      # -----------------------------
       - name: Deploy to Azure Static Web App (DEV)
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.SWA_APPS_DEV_TOKEN }}
           action: upload
-          app_location: apps/
+          app_location: apps
           output_location: ""

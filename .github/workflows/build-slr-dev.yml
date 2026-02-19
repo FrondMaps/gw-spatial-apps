@@ -1,0 +1,34 @@
+name: DEV - Build SLR
+
+on:
+  push:
+    branches:
+      - deploy-dev
+
+  workflow_dispatch:
+    inputs:
+      job_to_run:
+        description: "Run this build manually"
+        required: true
+        type: choice
+        options:
+          - build-slr
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'build-slr'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload SLR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: slr-app
+          path: apps/slr/
+          retention-days: 10
