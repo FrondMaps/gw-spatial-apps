@@ -17,14 +17,61 @@ on:
           - deploy-to-dev
 
 jobs:
-  deploy-to-dev:
-    name: Deploy to Development
+  build-climate-change:
+    name: Build Climate Change App
     if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout branch
         uses: actions/checkout@v4
+
+      - name: Upload Climate Change Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: climate-change-app
+          path: apps/climate-change/
+          retention-days: 10
+          overwrite: true
+
+  build-slr:
+    name: Build SLR App
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Upload SLR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: slr-app
+          path: apps/slr/
+          retention-days: 10
+          overwrite: true
+
+  deploy-to-dev:
+    name: Deploy to Development
+    needs: [build-climate-change, build-slr]
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Download Climate Change Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: climate-change-app
+          path: apps/climate-change/
+
+      - name: Download SLR Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: slr-app
+          path: apps/slr/
 
       - name: Deploy to Azure Static Web App (DEV)
         uses: Azure/static-web-apps-deploy@v1
