@@ -25,9 +25,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-        
+
       - name: Create apps folder
         run: mkdir -p apps
 
@@ -80,6 +78,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        
       #  Copy root static files from repo into apps/
       - name: Copy root index static files
         run: |
