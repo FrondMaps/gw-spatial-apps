@@ -55,7 +55,7 @@ jobs:
 
   deploy-to-dev:
     name: Deploy to Development
-    needs: [build-climate-change, build-slr]
+    #needs: [build-climate-change, build-slr]
     if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
     runs-on: ubuntu-latest
 
