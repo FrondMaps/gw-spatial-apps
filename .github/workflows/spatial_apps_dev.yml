@@ -80,7 +80,7 @@ jobs:
       #  Copy root static files from repo into apps/
       - name: Copy root index static files
         run: |
-          cp index.html apps/    
+          cp apps/index.html apps/   
 
       # -----------------------------
       # Deploy combined apps folder to Azure
