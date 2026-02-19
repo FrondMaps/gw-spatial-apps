@@ -80,11 +80,7 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@v4
-        
-      #  Copy root static files from repo into apps/
-      - name: Copy root index static files
-        run: |
-          cp apps/index.html apps/   
+
 
       # -----------------------------
       # Deploy combined apps folder to Azure
