@@ -52,6 +52,8 @@ jobs:
             --repo ${{ github.repository }} \
             -n climate-change-app \
             -D apps/climate-change
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       # -----------------------------
@@ -71,6 +73,9 @@ jobs:
             --repo ${{ github.repository }} \
             -n slr-app \
             -D apps/slr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
             
 
       # -----------------------------
