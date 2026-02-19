@@ -14,6 +14,8 @@ on:
         required: true
         type: choice
         options:
+          - build-climate-change
+          - build-slr
           - deploy-to-dev
 
 jobs:
