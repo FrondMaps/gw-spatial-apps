@@ -21,7 +21,7 @@ on:
 jobs:
   build-climate-change:
     name: Build Climate Change App
-    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'build-climate-change'
     runs-on: ubuntu-latest
 
     steps:
@@ -38,7 +38,7 @@ jobs:
 
   build-slr:
     name: Build SLR App
-    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-to-dev'
+    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'build-slr'
     runs-on: ubuntu-latest
 
     steps:
