@@ -1,94 +1,38 @@
-name: DEV - Deploy Static Web Apps
+name: Spatial Apps - DEV Deploy
 
 on:
-  push:
-    branches:
-      - deploy-dev
-
+    # Allow manually trigger only
   workflow_dispatch:
     inputs:
       job_to_run:
-        description: "Run deploy manually"
+        description: 'Which job to run'
         required: true
         type: choice
         options:
-          - deploy-dev
-
-permissions:
-  contents: read
-  actions: read
+          - deploy-to-dev
 
 jobs:
-  deploy:
-    # Run if branch is deploy-dev OR manual workflow_dispatch selecting deploy-dev
-    if: github.ref == 'refs/heads/deploy-dev' || inputs.job_to_run == 'deploy-dev'
+  deploy-to-prd:
+    name: Deploy to Deployment
+    if: inputs.job_to_run == 'deploy-to-dev' && github.ref == 'deploy-to-dev'
+
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout branch
+        uses: actions/checkout@v6
 
-      - name: Create apps folder
-        run: mkdir -p apps
-
-      # -----------------------------
-      # Download latest Climate Change artifact
-      # -----------------------------
-      - name: Download latest Climate Change artifact
+      - name: Generate env.js
         run: |
-          RUN_ID=$(gh run list \
-            --repo ${{ github.repository }} \
-            --workflow "DEV - Build Climate Change" \
-            --status success \
-            --limit 1 \
-            --json databaseId \
-            --jq '.[0].databaseId')
-
-          if [ -z "$RUN_ID" ]; then
-            echo "No successful Climate Change build found"
-            exit 1
-          fi
-
-          echo "Downloading Climate Change artifact from run: $RUN_ID"
-
-          gh run download $RUN_ID \
-            --repo ${{ github.repository }} \
-            -n climate-change-app \
-            -D apps/climate-change
+          mkdir -p ./public
+          echo "window.env = { GOOGLE_API_KEY: '${GOOGLE_API_DEV_KEY}' };" > ./public/env.js
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_DEV_KEY }}
 
-
-          
-      # -----------------------------
-      # Download latest SLR artifact
-      # -----------------------------
-      - name: Download latest SLR artifact
-        run: |
-          RUN_ID=$(gh run list \
-            --repo ${{ github.repository }} \
-            --workflow "DEV - Build SLR" \
-            --status success \
-            --limit 1 \
-            --json databaseId \
-            --jq '.[0].databaseId')
-
-          gh run download $RUN_ID \
-            --repo ${{ github.repository }} \
-            -n slr-app \
-            -D apps/slr
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-
-      # -----------------------------
-      # Deploy combined apps folder to Azure
-      # -----------------------------
-      - name: Deploy to Azure Static Web App (DEV)
+      - name: Deploy to Azure Static Web App (PROD)
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.SWA_APPS_DEV_TOKEN }}
+          azure_static_web_apps_api_token: ${{ secrets.SWA_APP_DEV_TOKEN }}
           action: upload
-          app_location: apps
+          app_location: apps/
           output_location: ""

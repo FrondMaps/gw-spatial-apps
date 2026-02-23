@@ -4,6 +4,10 @@
 	<!-- Climate Change maps app for GWRC, JRG 25-JUN-2018. Working version. v05. 22-JUL-2018-->
 	<!-- Updates : - added 3 extra annual layer groups as in DEV webservice, JRG 30_JUL-2018-->
 	<!--           - add whaitua overlay to layer control, JRG, 07-AUG-2018 -->
+
+	<script>
+		const GOOGLE_API_KEY = window.env?.GOOGLE_API_KEY || '';
+	</script>
 	<title>GWRC Climate Change Models Production</title>
 	<base href="/apps/climate_change/" />
 	<meta charset="utf-8">
@@ -466,11 +470,11 @@ $(document).ready(function () {
 				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'});
 				
 	// Need to add API key & protect the key
-	var googleHybrid = new L.tileLayer('http://mt1.google.com/vt/lyrs=y&key=AIzaSyBcG2mQlU_s5UIuwPYUCQ34JyIIIaLK5gs&x={x}&y={y}&z={z}', {
+	var googleHybrid = new L.tileLayer('http://mt1.google.com/vt/lyrs=y&key=${encodeURIComponent(GOOGLE_API_KEY)}&x={x}&y={y}&z={z}', {
             attribution: 'Google'
         });
 		
-	var googleStreet = new L.tileLayer('http://mt1.google.com/vt/lyrs=m&key=AIzaSyBcG2mQlU_s5UIuwPYUCQ34JyIIIaLK5gs&x={x}&y={y}&z={z}', {
+	var googleStreet = new L.tileLayer('http://mt1.google.com/vt/lyrs=m&key=${encodeURIComponent(GOOGLE_API_KEY)}&x={x}&y={y}&z={z}', {
             attribution: 'Google'
         }).addTo(map);
 	
