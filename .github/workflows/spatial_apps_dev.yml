@@ -12,9 +12,9 @@ on:
           - deploy-to-dev
 
 jobs:
-  deploy-to-prd:
-    name: Deploy to Deployment
-    if: inputs.job_to_run == 'deploy-to-dev' && github.ref == 'deploy-to-dev'
+  deploy-to-dev:
+    name: Deploy to Development
+    if: inputs.job_to_run == 'deploy-to-dev' || github.ref == 'deploy-to-dev'
 
     runs-on: ubuntu-latest
 
