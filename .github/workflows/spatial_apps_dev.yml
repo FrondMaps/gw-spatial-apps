@@ -29,7 +29,7 @@ jobs:
         env:
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_DEV_KEY }}
 
-      - name: Deploy to Azure Static Web App (PROD)
+      - name: Deploy to Azure Static Web App (DEV)
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.SWA_APPS_DEV_TOKEN }}
