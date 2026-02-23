@@ -22,6 +22,13 @@ jobs:
       - name: Checkout branch
         uses: actions/checkout@v6
 
+      - name: Generate env.js
+        run: |
+          mkdir -p ./public
+          echo "window.env = { GOOGLE_API_KEY: '${GOOGLE_API_PROD_KEY}' };" > ./public/env.js
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_PROD_KEY }}
+
       - name: Deploy to Azure Static Web App (PROD)
         uses: Azure/static-web-apps-deploy@v1
         with:
